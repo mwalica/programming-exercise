@@ -52,7 +52,6 @@ fun ListItem(
             Icon(
                 imageVector = icon,
                 contentDescription = desc,
-                tint = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.2f)
             )
         }
     }

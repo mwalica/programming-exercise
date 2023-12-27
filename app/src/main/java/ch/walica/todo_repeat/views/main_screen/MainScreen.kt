@@ -19,8 +19,11 @@ import androidx.compose.material.icons.rounded.CheckBox
 import androidx.compose.material.icons.rounded.CheckBoxOutlineBlank
 import androidx.compose.material.icons.rounded.IndeterminateCheckBox
 import androidx.compose.material.icons.rounded.Refresh
+import androidx.compose.material.icons.rounded.Remove
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -34,7 +37,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -64,7 +69,7 @@ fun MainScreen() {
                     IconButton(onClick = {
                         val date = ZonedDateTime.now().toEpochSecond()
                         state.todos.filter { todo ->
-                            todo.delayed && todo.date + 60 < date
+                            todo.delayed && todo.date + (60 * 60 * 24) < date
                         }.forEach { todo ->
                             viewModel.onEvent(
                                 TodosEvent.UpdateTodo(
@@ -107,14 +112,18 @@ fun MainScreen() {
             Text(
                 text = "Skills to exercise",
                 style = MaterialTheme.typography.titleMedium.copy(
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f)
                 ),
                 modifier = Modifier.padding(start = 8.dp, top = 12.dp, bottom = 8.dp)
             )
             Card(
                 modifier = Modifier
                     .fillMaxWidth(),
-                shape = RoundedCornerShape(18.dp)
+                shape = RoundedCornerShape(18.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f),
+                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
+                )
 
             ) {
                 LazyColumn(
@@ -134,7 +143,7 @@ fun MainScreen() {
                             ListItem(
                                 todo = todo,
                                 onEvent = viewModel::onEvent,
-                                icon = Icons.Rounded.IndeterminateCheckBox,
+                                icon = Icons.Rounded.Remove,
                                 desc = "To delayed",
                                 delayed = true
                             )
@@ -153,14 +162,18 @@ fun MainScreen() {
             Text(
                 text = "Delayed skills",
                 style = MaterialTheme.typography.titleMedium.copy(
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f)
                 ),
                 modifier = Modifier.padding(start = 8.dp, top = 12.dp, bottom = 8.dp)
             )
             Card(
                 modifier = Modifier
                     .fillMaxWidth(),
-                shape = RoundedCornerShape(18.dp)
+                shape = RoundedCornerShape(18.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f),
+                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
+                )
             ) {
                 LazyColumn(
                     modifier = Modifier.padding(8.dp)
@@ -178,7 +191,7 @@ fun MainScreen() {
                             ListItem(
                                 todo = todo,
                                 onEvent = viewModel::onEvent,
-                                icon = Icons.Rounded.CheckBox,
+                                icon = Icons.Rounded.Add,
                                 desc = "To exercise",
                                 delayed = false
                             )

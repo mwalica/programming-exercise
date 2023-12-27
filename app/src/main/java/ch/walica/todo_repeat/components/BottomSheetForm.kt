@@ -6,18 +6,23 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ch.walica.todo_repeat.TodosEvent
 import ch.walica.todo_repeat.TodosState
+
 
 @Composable
 fun BottomSheepForm(state: TodosState, onEvent: (TodosEvent) -> Unit) {
@@ -28,14 +33,21 @@ fun BottomSheepForm(state: TodosState, onEvent: (TodosEvent) -> Unit) {
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 32.dp)
     ) {
+
         TextField(
             value = state.enteredTitle,
             onValueChange = { text -> onEvent(TodosEvent.SetTitle(text)) },
-            label = { Text(text = "skill to exercise") }
+            label = { Text(text = "skill to exercise") },
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f),
+                unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.0f),
+            )
         )
-        TextButton(onClick = { onEvent(TodosEvent.InsertTodo) }) {
-            Icon(imageVector = Icons.Rounded.Add, contentDescription = "Add exercise")
-            Spacer(modifier = Modifier.width(8.dp))
+        FilledTonalIconButton(
+            onClick = { onEvent(TodosEvent.InsertTodo) },
+            shape = RoundedCornerShape(6.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Text(text = "Add")
         }
     }
