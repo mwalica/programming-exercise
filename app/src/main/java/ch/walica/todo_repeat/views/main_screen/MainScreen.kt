@@ -2,9 +2,12 @@ package ch.walica.todo_repeat.views.main_screen
 
 
 import android.graphics.Paint.Align
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,6 +20,8 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowDownward
 import androidx.compose.material.icons.rounded.CheckBox
 import androidx.compose.material.icons.rounded.CheckBoxOutlineBlank
+import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.IndeterminateCheckBox
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.Remove
@@ -24,18 +29,23 @@ import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DismissDirection
+import androidx.compose.material3.DismissValue
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SwipeToDismiss
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberBottomSheetScaffoldState
+import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -137,7 +147,9 @@ fun MainScreen() {
                         return@LazyColumn
                     }
 
-                    itemsIndexed(todos) { index, todo ->
+                    itemsIndexed(items = todos, key = { _, todo ->
+                        todo.id
+                    }) { index, todo ->
 
                         Column {
                             ListItem(
@@ -185,7 +197,10 @@ fun MainScreen() {
                         }
                         return@LazyColumn
                     }
-                    itemsIndexed(todos) { index, todo ->
+                    itemsIndexed(items = todos, key = { _, todo ->
+                        todo.id
+                    }) { index, todo ->
+
 
                         Column {
                             ListItem(
@@ -202,6 +217,8 @@ fun MainScreen() {
                                 )
                             }
                         }
+
+
                     }
                 }
             }
