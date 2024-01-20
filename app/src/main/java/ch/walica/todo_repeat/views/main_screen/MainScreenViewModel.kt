@@ -55,7 +55,8 @@ class MainScreenViewModel(private val dao: TodoDao = MyApp.appModule.db.dao) : V
 
                 val todo = Todo(
                     title = title,
-                    date = date.toEpochSecond()
+                    date = date.toEpochSecond(),
+                    dayOfYear = date.dayOfYear
                 )
                 viewModelScope.launch {
                     dao.upsertTodo(todo)

@@ -7,8 +7,9 @@ import androidx.room.PrimaryKey
 data class Todo(
     val title: String,
     val delayed: Boolean = false,
-    val archive: Boolean = false,
+    val selected: Boolean = false,
     val date: Long,
+    val dayOfYear: Int,
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0
 

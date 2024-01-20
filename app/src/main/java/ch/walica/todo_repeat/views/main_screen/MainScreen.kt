@@ -71,25 +71,42 @@ fun MainScreen() {
     val scaffoldState = rememberBottomSheetScaffoldState()
     val scope = rememberCoroutineScope()
 
+    val dayOfYear = ZonedDateTime.now().dayOfYear
+    state.todos.filter { todo ->
+        todo.selected && todo.dayOfYear != dayOfYear
+    }.forEach { todo ->
+        viewModel.onEvent(
+            TodosEvent.UpdateTodo(
+                todo.copy(
+                    selected = false
+                )
+            )
+        )
+    }
+
+    fun refreshList() {
+        val date = ZonedDateTime.now().toEpochSecond()
+        state.todos.filter { todo ->
+            todo.delayed && todo.date + (60 * 60 * 24 * 7) < date
+        }.forEach { todo ->
+            viewModel.onEvent(
+                TodosEvent.UpdateTodo(
+                    todo.copy(
+                        date = date,
+                        delayed = false
+                    )
+                )
+            )
+        }
+    }
+
 
     BottomSheetScaffold(
         topBar = {
             TopAppBar(title = { Text(text = "Programming exercise") },
                 actions = {
                     IconButton(onClick = {
-                        val date = ZonedDateTime.now().toEpochSecond()
-                        state.todos.filter { todo ->
-                            todo.delayed && todo.date + (60 * 60 * 24) < date
-                        }.forEach { todo ->
-                            viewModel.onEvent(
-                                TodosEvent.UpdateTodo(
-                                    todo.copy(
-                                        date = date,
-                                        delayed = false
-                                    )
-                                )
-                            )
-                        }
+                        refreshList()
                     }) {
                         Icon(
                             imageVector = Icons.Rounded.Refresh,
@@ -184,7 +201,7 @@ fun MainScreen() {
                 shape = RoundedCornerShape(18.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f),
-                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
+                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
                 )
             ) {
                 LazyColumn(
@@ -208,7 +225,8 @@ fun MainScreen() {
                                 onEvent = viewModel::onEvent,
                                 icon = Icons.Rounded.Add,
                                 desc = "To exercise",
-                                delayed = false
+                                delayed = false,
+                                delete = true
                             )
                             if (index < todos.lastIndex) {
                                 Divider(
